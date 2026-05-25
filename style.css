@@ -1,0 +1,161 @@
+/* Base Typography */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+    font-family: 'Poppins', sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Animated Gradient Text */
+.text-gradient {
+    background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 200% 200%;
+    animation: gradientShift 5s ease infinite;
+}
+
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Glassmorphism Cards */
+.glass-card {
+    background: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s ease;
+}
+
+.glass-card-dark {
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.glass-card:hover,
+.glass-card-dark:hover {
+    transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+    box-shadow: 15px 25px 30px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+}
+
+/* Product Image styling */
+.product-img-container {
+    perspective: 1000px;
+}
+
+.product-img {
+    transition: transform 0.5s ease;
+}
+
+.glass-card-dark:hover .product-img {
+    transform: scale(1.05) translateZ(20px);
+}
+
+/* Background Blob Animations */
+.blob {
+    position: absolute;
+    filter: blur(60px);
+    z-index: -1;
+    opacity: 0.4;
+    animation: float 10s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px) scale(1);
+    }
+
+    50% {
+        transform: translateY(-20px) scale(1.05);
+    }
+
+    100% {
+        transform: translateY(0px) scale(1);
+    }
+}
+
+/* Toast Notification */
+#toast-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    background: rgba(30, 41, 59, 0.95);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 12px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+    transform: translateX(150%);
+    transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+}
+
+.toast.show {
+    transform: translateX(0);
+}
+
+/* 3D Dark Mode Glass Cards */
+.dark .glass-card {
+    background: rgba(30, 41, 59, 0.8);
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    border-left: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 2px solid rgba(0, 0, 0, 0.6);
+    border-right: 2px solid rgba(0, 0, 0, 0.6);
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5), -5px -5px 15px rgba(255, 255, 255, 0.03);
+}
+
+.dark .glass-card:hover,
+.dark .glass-card-dark:hover {
+    transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+    box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.7), -5px -5px 15px rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(59, 130, 246, 0.5);
+    border-left: 1px solid rgba(59, 130, 246, 0.5);
+}
+
+:root {
+    --hero-overlay-start: rgba(248, 250, 252, 0.8);
+    --hero-overlay-end: rgba(248, 250, 252, 0.95);
+}
+
+.dark {
+    --hero-overlay-start: rgba(15, 23, 42, 0.85);
+    --hero-overlay-end: rgba(15, 23, 42, 1);
+}
