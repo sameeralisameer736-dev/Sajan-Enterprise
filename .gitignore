@@ -1,0 +1,44 @@
+### OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+### Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+### Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+### Build / Output
+dist/
+build/
+.cache/
+
+### Python (local server / tooling)
+venv/
+ENV/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*.pyo
+pip-log.txt
+
+### Environment
+.env
+.env.local
+.env.*.local
+
+### Misc
+*.log
+coverage/
+*.sqlite3
+
+### OneDrive
+~$*

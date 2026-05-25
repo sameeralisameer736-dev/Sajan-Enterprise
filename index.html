@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sajan Enterprise | Hardware Store</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+        }
+    </script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@500;600;700;800&display=swap"
+        rel="stylesheet">
+
+    <style>
+        /* Base Typography */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .font-heading {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        /* Animated Gradient Text */
+        .text-gradient {
+            background: linear-gradient(135deg, #2563eb, #7c3aed, #db2777);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% 200%;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card-dark {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover, .glass-card-dark:hover {
+            transform: translateY(-10px) rotateX(2deg) rotateY(-2deg);
+            box-shadow: 15px 25px 30px -5px rgba(0, 0, 0, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Product Image styling */
+        .product-img-container {
+            perspective: 1000px;
+        }
+        .product-img {
+            transition: transform 0.5s ease;
+        }
+        .glass-card-dark:hover .product-img {
+            transform: scale(1.05) translateZ(20px);
+        }
+
+        /* Background Blob Animations */
+        .blob {
+            position: absolute;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.4;
+            animation: float 10s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px) scale(1); }
+            50% { transform: translateY(-20px) scale(1.05); }
+            100% { transform: translateY(0px) scale(1); }
+        }
+
+        /* Toast Notification */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(30, 41, 59, 0.95);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        /* 3D Dark Mode Glass Cards */
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            border-left: 1px solid rgba(255, 255, 255, 0.15);
+            border-bottom: 2px solid rgba(0, 0, 0, 0.6);
+            border-right: 2px solid rgba(0, 0, 0, 0.6);
+            box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5), -5px -5px 15px rgba(255, 255, 255, 0.03);
+        }
+
+        .dark .glass-card:hover, .dark .glass-card-dark:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(-5deg);
+            box-shadow: 15px 15px 30px rgba(0, 0, 0, 0.7), -5px -5px 15px rgba(255, 255, 255, 0.05);
+            border-top: 1px solid rgba(59, 130, 246, 0.5);
+            border-left: 1px solid rgba(59, 130, 246, 0.5);
+        }
+
+        :root {
+            --hero-overlay-start: rgba(248, 250, 252, 0.8);
+            --hero-overlay-end: rgba(248, 250, 252, 0.95);
+        }
+        .dark {
+            --hero-overlay-start: rgba(15, 23, 42, 0.85);
+            --hero-overlay-end: rgba(15, 23, 42, 1);
+        }
+    </style>
+</head>
+
+<body class="text-slate-800 dark:text-slate-200 dark:bg-slate-900 antialiased relative selection:bg-blue-200 selection:text-blue-900 transition-colors duration-300">
+
+    <div class="blob bg-blue-300 w-96 h-96 rounded-full top-0 left-[-100px]"></div>
+    <div class="blob bg-purple-300 w-96 h-96 rounded-full top-40 right-[-100px]" style="animation-delay: 2s;"></div>
+    <div class="blob bg-emerald-300 w-96 h-96 rounded-full bottom-0 left-1/2" style="animation-delay: 4s;"></div>
+
+    <nav class="fixed w-full z-50 bg-white/70 dark:bg-slate-900/80 backdrop-blur-lg border-b border-white/50 dark:border-slate-800/50 shadow-sm transition-all duration-300" id="navbar">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#home" class="font-heading text-2xl font-bold tracking-tight text-slate-900 dark:text-white hover:opacity-80 transition flex items-center gap-2">
+                <i data-lucide="hammer" class="text-blue-600"></i>
+                Sajan<span class="text-blue-600">Enterprise</span>
+            </a>
+            <div class="hidden md:flex items-center space-x-8 font-medium text-sm text-slate-600 dark:text-slate-300">
+                <a href="#home" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Home</a>
+                <a href="#about" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Why Us</a>
+                <a href="#products" class="hover:text-blue-600 dark:hover:text-blue-400 transition-colors">Products</a>
+                <div class="flex items-center gap-4">
+                    <button id="theme-toggle" class="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors" title="Toggle Dark Mode">
+                        <i data-lucide="moon" class="w-4 h-4 dark:hidden"></i>
+                        <i data-lucide="sun" class="w-4 h-4 hidden dark:block"></i>
+                    </button>
+                    <a href="#contact" class="px-5 py-2.5 bg-slate-900 dark:bg-blue-600 text-white rounded-full hover:bg-blue-600 dark:hover:bg-blue-500 transition-all shadow-md hover:shadow-lg hover:-translate-y-0.5">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center pt-20 px-6 relative bg-cover bg-center bg-no-repeat transition-all duration-500" style="background-image: linear-gradient(to bottom, var(--hero-overlay-start), var(--hero-overlay-end)), url('assets/images/hero_background.png');">
+        <div class="max-w-4xl mx-auto text-center relative z-10" data-aos="zoom-in" data-aos-duration="1000">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 border border-blue-100 text-blue-600 text-sm font-semibold mb-8 shadow-sm">
+                <span class="relative flex h-2.5 w-2.5">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-blue-500"></span>
+                </span>
+                Premium Quality Tools & Materials
+            </div>
+            <h1 class="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight text-slate-900 dark:text-white">
+                <span id="dynamic-greeting" class="block text-2xl md:text-3xl font-medium text-slate-500 dark:text-slate-400 mb-2">Welcome to</span>
+                Build With Confidence. <br class="hidden md:block" /> <span class="text-gradient">Sajan Enterprise</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed max-w-2xl mx-auto font-light">
+                Your one-stop destination for professional grade hardware, building materials, and power tools. We build, manufacture, and supply products from all around India. Engineered for precision, built to last.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                <a href="#products" class="px-8 py-3.5 bg-slate-900 dark:bg-blue-600 text-white rounded-full font-medium hover:bg-blue-600 dark:hover:bg-blue-500 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1 flex items-center justify-center gap-2">
+                    Explore Inventory <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+                <a href="#about" class="px-8 py-3.5 bg-white dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-200 dark:border-slate-700 rounded-full font-medium hover:bg-slate-50 dark:hover:bg-slate-700 transition-all shadow-sm hover:shadow-md hover:-translate-y-1 flex items-center justify-center gap-2">
+                    Why Choose Us
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section id="stats" class="py-12 bg-white dark:bg-slate-800 border-y border-slate-200 dark:border-slate-700 transition-colors duration-300">
+        <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center divide-y md:divide-y-0 md:divide-x divide-slate-200 dark:divide-slate-700">
+            <div class="p-4" data-aos="fade-up" data-aos-delay="0">
+                <div class="text-4xl font-extrabold text-blue-600 dark:text-blue-400 mb-2"><span class="stat-counter" data-target="12000">0</span>+</div>
+                <div class="text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider text-sm">Products Sold</div>
+            </div>
+            <div class="p-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="text-4xl font-extrabold text-purple-600 dark:text-purple-400 mb-2"><span class="stat-counter" data-target="30">0</span></div>
+                <div class="text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider text-sm">Years in the Industry</div>
+            </div>
+            <div class="p-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="text-4xl font-extrabold text-emerald-600 dark:text-emerald-400 mb-2"><span class="stat-counter" data-target="10000">0</span>+</div>
+                <div class="text-slate-600 dark:text-slate-400 font-medium uppercase tracking-wider text-sm">Happy Customers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="about" class="py-24 px-6 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 dark:text-white mb-4">Why Sajan Enterprise?</h2>
+                <div class="w-16 h-1 bg-blue-600 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="glass-card p-8 rounded-3xl group" data-aos="fade-up" data-aos-delay="0" style="transform-style: preserve-3d;">
+                    <div class="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors duration-300" style="transform: translateZ(30px);">
+                        <i data-lucide="package" class="text-blue-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" style="transform: translateZ(20px);">Handle Large Orders</h4>
+                    <p class="text-slate-500 dark:text-slate-300 leading-relaxed" style="transform: translateZ(10px);">We have the capacity and resources to can handle large orders easily for commercial and industrial projects.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl group" data-aos="fade-up" data-aos-delay="100" style="transform-style: preserve-3d;">
+                    <div class="w-14 h-14 rounded-2xl bg-purple-50 flex items-center justify-center mb-6 group-hover:bg-purple-600 transition-colors duration-300" style="transform: translateZ(30px);">
+                        <i data-lucide="map-pin" class="text-purple-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" style="transform: translateZ(20px);">Our Heritage</h4>
+                    <p class="text-slate-500 dark:text-slate-300 leading-relaxed" style="transform: translateZ(10px);">Company headquarters located in Punjab, Malerkotla, with a dedicated branch in Kashmir, Srinagar.</p>
+                </div>
+
+                <div class="glass-card p-8 rounded-3xl group" data-aos="fade-up" data-aos-delay="200" style="transform-style: preserve-3d;">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-50 flex items-center justify-center mb-6 group-hover:bg-emerald-600 transition-colors duration-300" style="transform: translateZ(30px);">
+                        <i data-lucide="headphones" class="text-emerald-600 group-hover:text-white transition-colors"></i>
+                    </div>
+                    <h4 class="text-xl font-bold mb-3 text-slate-900 dark:text-white" style="transform: translateZ(20px);">Expert Support</h4>
+                    <p class="text-slate-500 dark:text-slate-300 leading-relaxed" style="transform: translateZ(10px);">Not sure what to get? Talk to our veteran tradesmen and hardware experts today.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products -->
+    <section id="products" class="py-24 bg-slate-900 dark:bg-slate-950 px-6 rounded-t-[3rem] relative z-10 overflow-hidden transition-colors duration-300">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-blue-600/20 blur-[100px] rounded-full pointer-events-none"></div>
+
+        <div class="max-w-6xl mx-auto relative z-10">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Categories</h2>
+                <div class="w-16 h-1 bg-blue-500 mx-auto rounded-full"></div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 max-w-4xl mx-auto gap-8">
+                <!-- Category 1 -->
+                <a href="#" class="glass-card-dark p-8 rounded-3xl group border border-slate-700 hover:border-blue-500/50 block text-center transition-all" data-aos="fade-up" data-aos-delay="0">
+                    <div class="w-20 h-20 rounded-2xl bg-blue-500/10 mx-auto flex items-center justify-center mb-6 group-hover:bg-blue-500 transition-colors duration-300 group-hover:scale-110 group-hover:-translate-y-2">
+                        <i data-lucide="zap" class="text-blue-400 group-hover:text-white transition-colors w-10 h-10"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white group-hover:text-blue-400 transition-colors">Power Tools</h4>
+                    <p class="text-slate-400 text-sm mt-3">Drills, Saws & More</p>
+                </a>
+
+                <!-- Category 2 -->
+                <a href="#" class="glass-card-dark p-8 rounded-3xl group border border-slate-700 hover:border-purple-500/50 block text-center transition-all" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-20 h-20 rounded-2xl bg-purple-500/10 mx-auto flex items-center justify-center mb-6 group-hover:bg-purple-500 transition-colors duration-300 group-hover:scale-110 group-hover:-translate-y-2">
+                        <i data-lucide="wrench" class="text-purple-400 group-hover:text-white transition-colors w-10 h-10"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-white group-hover:text-purple-400 transition-colors">Hand Tools</h4>
+                    <p class="text-slate-400 text-sm mt-3">Wrenches, Hammers, Pliers</p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact CTA -->
+    <section id="contact" class="py-24 px-6 bg-slate-900 dark:bg-slate-950 relative transition-colors duration-300">
+        <div class="max-w-4xl mx-auto" data-aos="zoom-in">
+            <div class="bg-gradient-to-br from-slate-800 to-slate-900 p-10 md:p-16 rounded-[2.5rem] border border-slate-700 text-center shadow-2xl relative overflow-hidden">
+                <div class="absolute top-[-50%] left-[-10%] w-[300px] h-[300px] bg-purple-500/20 blur-[80px] rounded-full pointer-events-none"></div>
+
+                <h3 class="text-3xl md:text-4xl font-bold text-white mb-6 relative z-10">Need Bulk Materials?</h3>
+                <p class="text-slate-400 mb-10 text-lg relative z-10">Contact us for commercial discounts, bulk orders, and custom supply solutions for your next big project.</p>
+
+                <div class="flex flex-col sm:flex-row justify-center items-center gap-6 relative z-10">
+                    <a href="mailto:info@sajanenterprise.com" class="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-white text-slate-900 rounded-2xl font-semibold hover:bg-blue-50 transition-colors shadow-lg group">
+                        <i data-lucide="mail" class="w-5 h-5 text-blue-600 group-hover:scale-110 transition-transform"></i>
+                        Email Us
+                    </a>
+                    <a href="tel:1234567890" class="w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 bg-slate-800 text-white border border-slate-600 rounded-2xl font-semibold hover:bg-slate-700 transition-colors shadow-lg group">
+                        <i data-lucide="phone" class="w-5 h-5 text-purple-400 group-hover:scale-110 transition-transform"></i>
+                        Call Store
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-slate-950 py-10 border-t border-slate-800 text-center text-slate-500 text-sm">
+        <div class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-2 font-bold text-white text-lg">
+                <i data-lucide="hammer" class="w-5 h-5 text-blue-500"></i> Sajan Enterprise
+            </div>
+            <p>© 2026 Sajan Enterprise. All rights reserved.</p>
+            <div class="flex gap-4">
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                <a href="#" class="hover:text-white transition-colors"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to Top Button -->
+    <button id="scrollToTopBtn" class="fixed bottom-24 right-6 z-50 p-3 bg-blue-600 text-white rounded-full shadow-[0_0_15px_rgba(37,99,235,0.5)] opacity-0 pointer-events-none transition-all duration-500 hover:bg-blue-500 hover:shadow-[0_0_25px_rgba(37,99,235,0.8)] hover:-translate-y-1 transform translate-y-8">
+        <i data-lucide="arrow-up" class="w-6 h-6"></i>
+    </button>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // Initialize Animations
+        AOS.init({ duration: 800, once: true, offset: 100 });
+        lucide.createIcons();
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-md', 'bg-white/85', 'dark:bg-slate-900/95');
+                nav.classList.remove('bg-white/70', 'dark:bg-slate-900/80');
+            } else {
+                nav.classList.remove('shadow-md', 'bg-white/85', 'dark:bg-slate-900/95');
+                nav.classList.add('bg-white/70', 'dark:bg-slate-900/80');
+            }
+        });
+
+        // Smooth Scroll Logic
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    window.scrollTo({
+                        top: target.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('theme-toggle');
+        const htmlElement = document.documentElement;
+        
+        if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlElement.classList.add('dark');
+        } else {
+            htmlElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark');
+            if (htmlElement.classList.contains('dark')) {
+                localStorage.setItem('theme', 'dark');
+                showToast('3D Dark Mode Enabled', 'moon');
+            } else {
+                localStorage.setItem('theme', 'light');
+                showToast('Light Mode Enabled', 'sun');
+            }
+        });
+
+        // Toast Notification System
+        function showToast(message, icon = 'info') {
+            let container = document.getElementById('toast-container');
+            if (!container) {
+                container = document.createElement('div');
+                container.id = 'toast-container';
+                document.body.appendChild(container);
+            }
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-5 h-5 text-blue-400"></i> <span>${message}</span>`;
+            container.appendChild(toast);
+            lucide.createIcons();
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Stats Counter Animation
+        const counters = document.querySelectorAll('.stat-counter');
+        let hasCounted = false;
+
+        const animateCounters = () => {
+            counters.forEach(counter => {
+                const target = +counter.getAttribute('data-target');
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                
+                let current = 0;
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.innerText = Math.ceil(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.innerText = target.toLocaleString();
+                    }
+                };
+                updateCounter();
+            });
+        };
+
+        const statsSection = document.getElementById('stats');
+        if (statsSection && window.IntersectionObserver) {
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && !hasCounted) {
+                    animateCounters();
+                    hasCounted = true;
+                }
+            }, { threshold: 0.5 });
+            observer.observe(statsSection);
+        } else {
+            animateCounters();
+        }
+
+        // Interactive Category Clicks
+        document.querySelectorAll('a[href="#"]').forEach(link => {
+            if(link.closest('.glass-card-dark')) {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const title = link.querySelector('h4');
+                    if (title) {
+                        showToast(`Exploring ${title.innerText} catalog...`, 'package');
+                    }
+                });
+            }
+        });
+
+        // Dynamic Greeting based on time of day
+        const setGreeting = () => {
+            const hour = new Date().getHours();
+            let greetingText = 'Welcome to';
+            if (hour >= 5 && hour < 12) {
+                greetingText = 'Good Morning, Welcome to';
+            } else if (hour >= 12 && hour < 18) {
+                greetingText = 'Good Afternoon, Welcome to';
+            } else if (hour >= 18 || hour < 5) {
+                greetingText = 'Good Evening, Welcome to';
+            }
+            const greetingElement = document.getElementById('dynamic-greeting');
+            if(greetingElement) greetingElement.innerText = greetingText;
+        };
+        setGreeting();
+
+        // Scroll to Top Logic
+        const scrollToTopBtn = document.getElementById('scrollToTopBtn');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 500) {
+                scrollToTopBtn.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-8');
+                scrollToTopBtn.classList.add('opacity-100', 'translate-y-0');
+            } else {
+                scrollToTopBtn.classList.add('opacity-0', 'pointer-events-none', 'translate-y-8');
+                scrollToTopBtn.classList.remove('opacity-100', 'translate-y-0');
+            }
+        });
+
+        scrollToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+
+</html>
